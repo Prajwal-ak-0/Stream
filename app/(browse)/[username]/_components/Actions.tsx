@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { onFollow } from '@/server/follow';
+import { onFollow, onUnfollow } from '@/server/follow';
 import React, { useTransition } from 'react'
 import { toast } from 'sonner';
 
@@ -11,27 +11,39 @@ interface ActionsProps {
 };
 
 const Actions = (
-    { isFollowing,userId }: ActionsProps
+    { isFollowing, userId }: ActionsProps
 ) => {
     const [isPending, startTransition] = useTransition();
 
-    const handleClick = () => {
+    const handleFollow = () => {
         startTransition(() => {
             onFollow(userId)
-            .then((data) => toast.success(`You have Followed ${data.following.username}`))
-            .catch(() => toast.error("Something went wrong"));
-    })
-};
+                .then((data) => toast.success(`You have Followed ${data.following.username}`))
+                .catch(() => toast.error("Something went wrong"));
+        })
+    };
 
-return (
-    <Button
-        variant='primary'
-        disabled={isFollowing || isPending}
-        onClick={handleClick}
-    >
-        Follow
-    </Button>
-)
+    const handleUnFollow = () => {
+        startTransition(() => {
+            onUnfollow(userId)
+                .then((data) => toast.success(`You have UnFollowed ${data.following.username}`))
+                .catch(() => toast.error("Something went wrong"));
+        })
+    };
+
+    const onClick = isFollowing ? handleUnFollow : handleFollow;
+
+    return (
+        <>
+            <Button
+                variant='primary'
+                disabled={ isPending}
+                onClick={onClick}
+            >
+                {isFollowing ? 'Unfollow' : 'Follow'}
+            </Button>
+        </>
+    )
 }
 
 export default Actions
