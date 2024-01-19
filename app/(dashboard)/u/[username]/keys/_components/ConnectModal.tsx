@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createIngress } from "@/server/ingress";
 
 const RTMP = String(IngressInput.RTMP_INPUT);
 const WHIP = String(IngressInput.WHIP_INPUT);
@@ -38,7 +39,14 @@ export const ConnectModal = () => {
   const [ingressType, setIngressType] = useState<IngressType>(RTMP);
 
   const onSubmit = () => {
-    console.log("submitting", ingressType);
+    startTransition(() => {
+      createIngress(parseInt(ingressType))
+        .then(() => {
+          toast.success("Ingress created");
+          closeRef?.current?.click();
+        })
+        .catch(() => toast.error("Something went wrong"));
+    });
   }
 
   return (
