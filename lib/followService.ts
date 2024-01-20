@@ -143,7 +143,11 @@ export const followUser = async (id: string) => {
           }
         },
         include: {
-          following: true,
+          following: {
+            include:{
+              stream:true
+            }
+          },
         },
       });
     
