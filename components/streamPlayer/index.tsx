@@ -4,6 +4,9 @@ import { useViewerToken } from "@/hooks/useViewerToken";
 import { Stream, User } from "@prisma/client";
 import { LiveKitRoom } from "@livekit/components-react";
 import { Video } from "./Video";
+import { Chat } from "./Chat";
+import { cn } from "@/lib/utils";
+import { useChatSidebar } from "@/hooks/useChatSidebar";
 
 interface StreamPlayerProps {
   user: User & {
@@ -23,6 +26,8 @@ const StreamPlayer = ({
     identity,
   } = useViewerToken(user.id);
 
+  const { collapsed } = useChatSidebar((state) => state);
+
   if (!token || !name || !identity) {
     return (
       <div className="">
@@ -41,6 +46,23 @@ const StreamPlayer = ({
           <Video
             hostName={user.username}
             hostIdentity={user.id}
+          />
+
+        </div>
+        <div
+          className={cn(
+            "col-span-1",
+            collapsed && "hidden"
+          )}
+        >
+          <Chat
+            viewerName={name}
+            hostName={user.username}
+            hostIdentity={user.id}
+            isFollowing={isFollowing}
+            isChatEnabled={stream.isChatEnabled}
+            isChatDelayed={stream.isChatDelayed}
+            isChatFollowersOnly={stream.isChatFollowersOnly}
           />
         </div>
       </LiveKitRoom>
