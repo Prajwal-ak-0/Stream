@@ -30,7 +30,7 @@ type CustomUser = {
   bio: string | null;
   stream: CustomStream | null;
   imageUrl: string;
-  _count: { followedBy: number }
+  // _count: { followedBy: number }
 };
 
 interface StreamPlayerProps {
@@ -94,7 +94,7 @@ export const StreamPlayer = ({
             hostIdentity={user.id}
             viewerIdentity={identity}
             bio={user.bio}
-            followedByCount={user._count.followedBy}
+            // followedByCount={user._count.followedBy}
           />
         </div>
         <div
