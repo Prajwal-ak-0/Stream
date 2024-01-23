@@ -4,6 +4,7 @@ import React from 'react'
 import Actions from './_components/Actions';
 import { isFollowingUser } from '@/lib/followService';
 import { isBlockedByUser } from '@/lib/blockService';
+import { StreamPlayer } from '@/components/streamPlayer';
 
 interface UserPageProps {
     params: {
@@ -11,30 +12,30 @@ interface UserPageProps {
     };
 };
 
-const UserPage =async ({
+const UserPage = async ({
     params
-  }: UserPageProps) => {
+}: UserPageProps) => {
     const user = await getUserByUsername(params.username)
-    
-    if(!user) {
+
+    if (!user || !user.stream) {
         notFound();
     }
-    
+
     const isFollowing = await isFollowingUser(user.id)
     const isBlocked = await isBlockedByUser(user.id)
-    
-    if(isBlocked){
+
+    if (isBlocked) {
         notFound();
     }
 
     return (
-        <div>
-            <h1>{user.username}</h1>
-            <h1>{user.id}</h1>
-            <p>is Following : {`${isFollowing}`}</p>
-            <p>is Blocked : {`${isBlocked}`}</p>
-            <Actions isFollowing={isFollowing} userId={user.id}/>
-        </div>
+        <>
+            <StreamPlayer
+                user={user}
+                stream={user.stream}
+                isFollowing={isFollowing}
+            />
+        </>
     )
 }
 
