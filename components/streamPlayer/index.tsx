@@ -30,7 +30,7 @@ type CustomUser = {
   bio: string | null;
   stream: CustomStream | null;
   imageUrl: string;
-  // _count: { followedBy: number }
+  _count: { followedBy: number }
 };
 
 interface StreamPlayerProps {
