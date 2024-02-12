@@ -15,7 +15,7 @@ export const getSelf = async () => {
     })
 
     if (!user) {
-        throw new Error("No user found")
+        return null;
     }
 
     return user;
@@ -25,7 +25,7 @@ export const getSelfByUsername = async (username: string) => {
     const self = await getSelf();
 
     if (!self || !self.username) {
-        throw new Error("Unauthorized")
+        return null;
     }
 
     const user = await db.user.findUnique({
